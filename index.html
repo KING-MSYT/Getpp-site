@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>WhatsApp DP Downloader</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="card">
+    <h1>WhatsApp DP Downloader</h1>
+    <input id="num" placeholder="Enter number (e.g. 9477xxxxxxx)">
+    <button id="get">Get Photo</button>
+    <div id="result"></div>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
+<style>
+  body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
+  background: linear-gradient(135deg, #25D366, #128C7E);
+}
+
+.card {
+  background: #fff;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+  text-align: center;
+  width: 300px;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background: #25D366;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #128C7E;
+}
+
+#result img {
+  margin-top: 15px;
+  border-radius: 10px;
+  max-width: 100%;
+  }
+</style>
+<script>document.getElementById('get').addEventListener('click', async () => {
+  const num = document.getElementById('num').value.trim();
+  if (!num) return alert('Please enter a number');
+
+  const result = document.getElementById('result');
+  result.innerHTML = 'Loading...';
+
+  try {
+    const resp = await fetch(`/api/getProfile?num=${encodeURIComponent(num)}`);
+    const data = await resp.json();
+    if (data.error) {
+      result.innerHTML = `<p style="color:red">${data.error}</p>`;
+    } else {
+      result.innerHTML = `<img src="${data.photo}" alt="profile photo">`;
+    }
+  } catch (err) {
+    result.innerHTML = `<p style="color:red">Error: ${err.message}</p>`;
+  }
+});
+</script>
+
